@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         id: "problem1",
         title: "身份验证失败",
+        summary: "身份验证失败,重启客户端",
+        url: "subpages/authfailed.html",
       }
     ]
   
