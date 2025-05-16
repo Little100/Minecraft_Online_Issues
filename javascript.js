@@ -245,9 +245,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       const matchedProblems = problemsDatabase.filter(
-        (problem) => {
+        (problem, index) => { // 添加 index 用于日志追踪
+          console.log(`[Filter DB] Index: ${index}, Problem:`, JSON.stringify(problem));
+          console.log(`[Filter DB] Index: ${index}, typeof problem.title: ${typeof problem.title}, title: ${problem ? problem.title : 'N/A'}`);
+          console.log(`[Filter DB] Index: ${index}, typeof problem.summary: ${typeof problem.summary}, summary: ${problem ? problem.summary : 'N/A'}`);
+
           const titleMatch = problem && typeof problem.title === 'string' && problem.title.toLowerCase().includes(searchTerm);
           const summaryMatch = problem && typeof problem.summary === 'string' && problem.summary.toLowerCase().includes(searchTerm);
+
+          if (problem && (typeof problem.title !== 'string' || typeof problem.summary !== 'string')) {
+              console.error(`[Filter DB Error] Problem at index ${index} has non-string title or summary. Title type: ${typeof problem.title}, Summary type: ${typeof problem.summary}`);
+          }
+
           return titleMatch || summaryMatch;
         }
       );
