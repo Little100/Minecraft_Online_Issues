@@ -36,13 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         id: "online3",
         title: "ipv6",
-        summary: "ipv6,联机",
+        summary: 
+          "ipv6,联机",
         url: "subpages/ipv6.html",
       },
       {
         id: "problem1",
         title: "身份验证失败",
-        summary: "身份验证失败,重启客户端",
+        summary: 
+          "身份验证失败,重启客户端",
         url: "subpages/authfailed.html",
       }
     ]
