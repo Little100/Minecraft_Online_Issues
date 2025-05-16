@@ -1,0 +1,36 @@
+<article class="problem-details">
+    <h2>如何使用p2p技术进行联机?</h2>
+    <p class="problem-summary">您可以简单理解为p2p在您和您的朋友之间直接进行了连接而没有经过您的云服务器并且和您的云服务器带宽根本没有关系,所以对于小水管类型的frp来说这个是非常有用的技术。</p>
+
+    <section class="solution-steps">
+        <h3>方法:</h3>
+        <ol>
+            <li>
+                <strong>步骤一：</strong> 您需要有自己的Openp2p的客户端,如果您还没有,我们建议您使用乖漏斗的OPL工具,带有GUI很方便,此文章也针对此工具做教程
+                <pre><code class="language-plaintext">链接:https://github.com/Guailoudou/OPL-WpfApp
+当然您也可以去看此人的博客:https://blog.gldhn.top/2024/04/19/opl_ui</code></pre>
+            </li>
+            <li>
+                <strong>步骤二：</strong> 请把您的UID复制给您的朋友然后让其点击右上角的新建连接
+                <figure>
+                    <img src="../images/opl.png" alt="步骤截图示例" style="max-width: 100%; height: auto;">
+                    <figcaption>图示</figcaption>
+                </figure>
+            </li>
+            <li>
+                <strong>步骤三：</strong> 在UID中输入您的UID,远程端口输入您所开放的局域网端口/服务器端口比如25565,单击添加后返回上图点击启动
+                <figure>
+                    <img src="../images/tunnel.png" alt="步骤截图示例" style="max-width: 100%; height: auto;">
+                    <figcaption>图示</figcaption>
+                </figure>
+            </li>
+        </ol>
+    </section>
+
+    <section class="additional-notes">
+        <h3>注意事项：</h3>
+        <p>此工具允许客户端直接连接您的所有端口不论udp还是tcp,所以不建议您应用在多人服务器上以保护您的服务器安全[当然您的服务器没有其他的危险的端口开放可以无视]</p>
+        <p>此外,此工具出现的错误请不要在我们的issue区提出,您应该移步到https://github.com/Guailoudou/OPL-WpfApp/issues或者移步到坐着的qq群:873885623</p>
+    </section>
+
+</article>

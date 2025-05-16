@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft 联机问题</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/minecraft-logo.png" type="image/png">
+</head>
+
+<body>
+    <div id="loading-screen">
+        <div class="loading-container">
+            <img src="images/grass_block.png" alt="加载中" class="loading-block">
+            <p>加载中...</p>
+        </div>
+    </div>
+
+    <div id="fixed-theme-toggle" title="切换主题">
+        <img src="images/torch.png" alt="切换主题" id="theme-toggle-icon">
+    </div>
+    <div class="search-header">
+        <div class="header-app-title">Minecraft Online Issues</div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="搜索问题...">
+            <div id="search-results" class="search-results">
+            </div>
+            <div id="search-not-found" class="search-not-found">
+                <p>没找到您的问题？可能您需要<a href="https://github.com/Little100/Minecraft_Online_Issues"
+                        target="_blank">开一个issue</a>来帮助我们继续完善</p>
+                <p>如果您解决了还请您fork我们并且merger到我们的项目中，帮助其他人也解决同样的问题。</p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <button id="mobile-menu-toggle" aria-label="打开菜单">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="images/minecraft-logo.png" alt="Minecraft Logo" class="logo">
+            </div>
+            <div class="navigation-group">
+                <h2>联机导航</h2>
+                <nav id="connection-navigation">
+                    <ul>
+                        <li><a href="#" data-page="subpages/frp.html">FRP[内网穿透]</a></li>
+                        <li><a href="#" data-page="subpages/p2p.html">p2p</a></li>
+                        <li><a href="#" data-page="subpages/ipv6.html">ipv6</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="navigation-group">
+                <h2>问题导航</h2>
+                <nav id="problem-navigation">
+                    <ul>
+                        <li><a href="#" data-page="subpages/authfailed.html">身份验证失败</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <main class="content" id="content-area">
+            <div class="welcome-content">
+                <h1>您的麦块联机出现错误了嘛?看看这里吧!</h1>
+                <div class="grass-block-container">
+                    <img src="images/grass_block.png" alt="草方块" class="grass-block">
+                </div>
+                <p>请从左侧选择一个问题查看解决方案。</p>
+                <p>如果找不到您的问题，可以使用上方的搜索框进行搜索。</p>
+            </div>
+        </main>
+    </div>
+    <script src="javascript.js"></script>
+</body>
+
+</html>

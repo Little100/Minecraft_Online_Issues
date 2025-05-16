@@ -1,0 +1,30 @@
+<article class="problem-details">
+    <h2>如何使用ipv6联机?</h2>
+    <p class="problem-summary">ipv6不是一个新鲜的技术了,应该大部分人都接入了ipv6网络。但是,如果您没有则这篇文章不适用于您。</p>
+
+    <section class="solution-steps">
+        <h3>方法:</h3>
+        <ol>
+            <li>
+                <strong>步骤一：</strong> 获取到您的ipv6,请在cmd中输入
+                <pre><code class="language-plaintext">ipconfig</code></pre>
+            </li>
+            <li>
+                <strong>步骤二：</strong> 找到您的网络适配器并且找到框中的任意一行复制
+                <figure>
+                    <img src="../images/ipv6.png" alt="步骤截图示例" style="max-width: 100%; height: auto;">
+                    <figcaption>图示</figcaption>
+                </figure>
+            </li>
+            <li>
+                <strong>步骤三：</strong> 以开放的端口为25565为例子,假设您的ipv6地址是aa11::bb22::cc33::dd44,则您应该让别人连接的链接为[aa11::bb22::cc33::dd44]:25565
+            </li>
+        </ol>
+    </section>
+
+    <section class="additional-notes">
+        <h3>注意事项：</h3>
+        <p>注意中括号必须保留,此外防火墙建议关闭。</p>
+    </section>
+
+</article>

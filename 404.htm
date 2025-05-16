@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到 | Minecraft 联机问题</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/minecraft-logo.png" type="image/png">
+    <style>
+        .error-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .error-image {
+            max-width: 200px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .error-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: var(--accent-color-dark);
+        }
+
+        body:not(.dark-mode) .error-title {
+            color: var(--accent-color-light);
+        }
+
+        .error-message {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            margin-top: 30px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--accent-color-dark);
+            color: var(--accent-text-dark);
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        body:not(.dark-mode) .home-button {
+            background-color: var(--accent-color-light);
+            color: var(--accent-text-light);
+        }
+
+        .home-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .creeper-face {
+            font-family: monospace;
+            font-size: 2em;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            20% {
+                transform: rotate(-10deg);
+            }
+
+            40% {
+                transform: rotate(10deg);
+            }
+
+            60% {
+                transform: rotate(-10deg);
+            }
+
+            80% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .error-image:hover {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fixed-theme-toggle" title="切换主题">
+        <img src="images/torch.png" alt="切换主题" id="theme-toggle-icon">
+    </div>
+
+    <div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <main class="content" style="width: 100%;">
+            <div class="error-container">
+                <img src="images/oops.png" alt="Oops!" class="error-image">
+                <h1 class="error-title">404 - 页面未找到</h1>
+                <div class="creeper-face">ʘ_ʘ</div>
+                <p class="error-message">
+                    看起来您挖得太深了，发现了一个空洞！<br>
+                    您尝试访问的页面可能已被移动、删除或者从未存在过。
+                </p>
+                <div class="error-actions">
+                    <a href="index.html" class="home-button">返回主页</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const fixedThemeToggle = document.getElementById("fixed-theme-toggle");
+            const themeToggleIcon = document.getElementById("theme-toggle-icon");
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+            function applyTheme(theme) {
+                if (theme === "dark") {
+                    document.body.classList.add("dark-mode");
+                    localStorage.setItem("theme", "dark");
+                    if (themeToggleIcon) themeToggleIcon.src = "images/redstone_torch.png";
+                } else {
+                    document.body.classList.remove("dark-mode");
+                    localStorage.setItem("theme", "light");
+                    if (themeToggleIcon) themeToggleIcon.src = "images/torch.png";
+                }
+            }
+
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (prefersDarkScheme.matches) {
+                applyTheme("dark");
+            } else {
+                applyTheme("light");
+            }
+
+            if (fixedThemeToggle) {
+                fixedThemeToggle.addEventListener("click", () => {
+                    if (document.body.classList.contains("dark-mode")) {
+                        applyTheme("light");
+                    } else {
+                        applyTheme("dark");
+                    }
+                });
+            }
+
+            prefersDarkScheme.addEventListener("change", (e) => {
+                if (!localStorage.getItem("theme")) {
+                    applyTheme(e.matches ? "dark" : "light");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
