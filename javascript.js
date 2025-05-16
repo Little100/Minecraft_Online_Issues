@@ -4,15 +4,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentArea = document.getElementById("content-area")
     const problemNavigation = document.getElementById("problem-navigation")
     const connectionNavigation = document.getElementById("connection-navigation")
-    const sidebarNavigations = document.querySelectorAll(".sidebar nav")
+    // const sidebarNavigations = document.querySelectorAll(".sidebar nav") // 旧的直接获取
     const mobileMenuToggle = document.getElementById("mobile-menu-toggle")
-    const sidebar = document.querySelector(".sidebar")
+    const sidebar = document.querySelector(".sidebar") // 先获取 .sidebar
     const loadingScreen = document.getElementById("loading-screen")
-  
-    let navLinks = []
-    sidebarNavigations.forEach((nav) => {
-      navLinks = navLinks.concat(Array.from(nav.querySelectorAll("a")))
-    })
+
+    let sidebarNavigations = null;
+    let navLinks = [];
+
+    if (sidebar) { // 确保 .sidebar 存在
+        sidebarNavigations = sidebar.querySelectorAll("nav"); // 然后在其内部查找 nav
+        if (sidebarNavigations && sidebarNavigations.length > 0) {
+            sidebarNavigations.forEach((nav) => {
+                navLinks = navLinks.concat(Array.from(nav.querySelectorAll("a")));
+            });
+        } else {
+            console.warn("No <nav> elements found within .sidebar.");
+        }
+    } else {
+        console.error(".sidebar element not found in the DOM at script execution time.");
+    }
   
     const searchInput = document.getElementById("search-input")
     const searchResults = document.getElementById("search-results")
@@ -234,9 +245,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       const matchedProblems = problemsDatabase.filter(
-        (problem) =>
-          problem.title.toLowerCase().includes(searchTerm) || problem.summary.toLowerCase().includes(searchTerm),
-      )
+        (problem) => {
+          const titleMatch = problem && typeof problem.title === 'string' && problem.title.toLowerCase().includes(searchTerm);
+          const summaryMatch = problem && typeof problem.summary === 'string' && problem.summary.toLowerCase().includes(searchTerm);
+          return titleMatch || summaryMatch;
+        }
+      );
   
       if (matchedProblems.length > 0) {
         matchedProblems.forEach((problem) => {
