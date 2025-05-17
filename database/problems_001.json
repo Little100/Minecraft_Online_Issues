@@ -1,0 +1,28 @@
+{
+  "problems": [
+    {
+      "id": "online1",
+      "title": "FRP[内网穿透]",
+      "summary": "使用内网穿透连接到服务器,FRP,内网穿透,联机",
+      "url": "subpages/frp.html"
+    },
+    {
+      "id": "online2",
+      "title": "p2p",
+      "summary": "p2p,点对点,联机",
+      "url": "subpages/p2p.html"
+    },
+    {
+      "id": "online3",
+      "title": "ipv6",
+      "summary": "ipv6,联机",
+      "url": "subpages/ipv6.html"
+    },
+    {
+      "id": "problem1",
+      "title": "身份验证失败",
+      "summary": "身份验证失败,重启客户端",
+      "url": "subpages/authfailed.html"
+    }
+  ]
+}

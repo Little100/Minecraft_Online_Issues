@@ -1091,3 +1091,63 @@ body:not(.dark-mode) #fixed-theme-toggle {
         font-size: 1.1em;
     }
 }
+
+.search-database-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    margin-top: 10px;
+    background-color: var(--search-bg-dark);
+    border: 1px solid var(--search-border-dark);
+    border-radius: 8px;
+    color: var(--text-color-dark);
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+    font-size: 0.9em;
+}
+
+body:not(.dark-mode) .search-database-loading {
+    background-color: var(--search-bg-light);
+    border-color: var(--search-border-light);
+    color: var(--text-color-light);
+}
+
+.search-database-loading span {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-database-loading .loading-icon {
+    display: inline-block;
+    margin-right: 8px;
+    animation: spin 1.5s linear infinite;
+    font-style: normal;
+}
+
+.search-database-loading button {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    background-color: var(--button-bg-dark);
+    color: var(--button-text-dark);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+body:not(.dark-mode) .search-database-loading button {
+    background-color: var(--button-bg-light);
+    color: var(--button-text-light);
+}
+
+.search-database-loading button:hover {
+    background-color: var(--button-hover-bg-dark);
+    transform: translateY(-1px);
+    /* Slight lift on hover */
+}
+
+body:not(.dark-mode) .search-database-loading button:hover {
+    background-color: var(--button-hover-bg-light);
+}
