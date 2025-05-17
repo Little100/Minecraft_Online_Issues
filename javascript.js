@@ -5,161 +5,164 @@ document.addEventListener("DOMContentLoaded", () => {
   const problemNavigation = document.getElementById("problem-navigation")
   const connectionNavigation = document.getElementById("connection-navigation")
   const mobileMenuToggle = document.getElementById("mobile-menu-toggle")
-  const sidebar = document.querySelector(".sidebar");
+  const sidebar = document.querySelector(".sidebar")
   const loadingScreen = document.getElementById("loading-screen")
 
-  let sidebarNavigations = null;
-  let navLinks = [];
+  let sidebarNavigations = null
+  let navLinks = []
 
   if (sidebar) {
-    sidebarNavigations = sidebar.querySelectorAll("nav");
+    sidebarNavigations = sidebar.querySelectorAll("nav")
     if (sidebarNavigations && sidebarNavigations.length > 0) {
       sidebarNavigations.forEach((nav) => {
-        navLinks = navLinks.concat(Array.from(nav.querySelectorAll("a")));
-      });
+        navLinks = navLinks.concat(Array.from(nav.querySelectorAll("a")))
+      })
     }
   }
 
   const searchInput = document.getElementById("search-input")
   const searchResults = document.getElementById("search-results")
   const searchNotFound = document.getElementById("search-not-found")
-  let searchDatabaseLoadingEl = document.getElementById("search-database-loading");
+  let searchDatabaseLoadingEl = document.getElementById("search-database-loading")
 
-  let problemsData = [];
-  let isDatabaseLoading = false;
-  let databaseFullyLoaded = false;
-  let dataFilesToLoad = [];
-  let loadedDataFileCount = 0;
+  let problemsData = []
+  let isDatabaseLoading = false
+  let databaseFullyLoaded = false
+  let dataFilesToLoad = []
+  let loadedDataFileCount = 0
 
   if (!searchDatabaseLoadingEl && searchInput) {
-    searchDatabaseLoadingEl = document.createElement('div');
-    searchDatabaseLoadingEl.id = 'search-database-loading';
-    searchDatabaseLoadingEl.className = 'search-database-loading';
-    searchDatabaseLoadingEl.style.display = 'none';
-    searchDatabaseLoadingEl.innerHTML = '<span><i class="loading-icon">🔄</i> 数据库加载中...</span> <button id="reload-database-button">重试加载</button>';
+    searchDatabaseLoadingEl = document.createElement("div")
+    searchDatabaseLoadingEl.id = "search-database-loading"
+    searchDatabaseLoadingEl.className = "search-database-loading"
+    searchDatabaseLoadingEl.style.display = "none"
+    searchDatabaseLoadingEl.innerHTML =
+      '<span><i class="loading-icon">🔄</i> 数据库加载中...</span> <button id="reload-database-button">重试加载</button>'
     if (searchResults) {
-      searchResults.parentNode.insertBefore(searchDatabaseLoadingEl, searchResults);
+      searchResults.parentNode.insertBefore(searchDatabaseLoadingEl, searchResults)
     } else {
-      searchInput.parentNode.insertBefore(searchDatabaseLoadingEl, searchInput.nextSibling);
+      searchInput.parentNode.insertBefore(searchDatabaseLoadingEl, searchInput.nextSibling)
     }
-    const reloadButton = searchDatabaseLoadingEl.querySelector('#reload-database-button');
+    const reloadButton = searchDatabaseLoadingEl.querySelector("#reload-database-button")
     if (reloadButton) {
-      reloadButton.addEventListener('click', () => {
+      reloadButton.addEventListener("click", () => {
         if (!isDatabaseLoading) {
-          loadDatabaseIndex();
+          loadDatabaseIndex()
         }
-      });
+      })
     }
   }
 
-
   async function fetchJson(url) {
-    const response = await fetch(url);
+    const response = await fetch(url)
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} for ${url}`);
+      throw new Error(`HTTP error! status: ${response.status} for ${url}`)
     }
-    return response.json();
+    return response.json()
   }
 
   async function loadAllDataFiles() {
     if (dataFilesToLoad.length === 0) {
-      console.log("没有数据文件需要加载。");
-      databaseFullyLoaded = true;
-      isDatabaseLoading = false;
-      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = 'none';
+      console.log("没有数据文件需要加载。")
+      databaseFullyLoaded = true
+      isDatabaseLoading = false
+      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = "none"
       if (searchInput && searchInput.value.trim() !== "") {
-        updateSearchResults(searchInput.value.toLowerCase().trim());
+        updateSearchResults(searchInput.value.toLowerCase().trim())
       }
-      return;
+      return
     }
 
-    isDatabaseLoading = true;
+    isDatabaseLoading = true
     if (searchDatabaseLoadingEl) {
-      searchDatabaseLoadingEl.style.display = 'block';
-      searchDatabaseLoadingEl.querySelector('span').innerHTML = `<span><i class="loading-icon">🔄</i> 数据库加载中 (${loadedDataFileCount}/${dataFilesToLoad.length})...</span>`;
+      searchDatabaseLoadingEl.style.display = "block"
+      searchDatabaseLoadingEl.querySelector("span").innerHTML =
+        `<span><i class="loading-icon">🔄</i> 数据库加载中 (${loadedDataFileCount}/${dataFilesToLoad.length})...</span>`
     }
 
-    const promises = dataFilesToLoad.map(fileInfo =>
+    const promises = dataFilesToLoad.map((fileInfo) =>
       fetchJson(fileInfo.path)
-        .then(dataChunk => {
+        .then((dataChunk) => {
           if (dataChunk.problems && Array.isArray(dataChunk.problems)) {
-            problemsData = problemsData.concat(dataChunk.problems);
+            problemsData = problemsData.concat(dataChunk.problems)
           }
-          loadedDataFileCount++;
+          loadedDataFileCount++
           if (searchDatabaseLoadingEl) {
-            searchDatabaseLoadingEl.querySelector('span').innerHTML = `<span><i class="loading-icon">🔄</i> 数据库加载中 (${loadedDataFileCount}/${dataFilesToLoad.length})...</span>`;
+            searchDatabaseLoadingEl.querySelector("span").innerHTML =
+              `<span><i class="loading-icon">🔄</i> 数据库加载中 (${loadedDataFileCount}/${dataFilesToLoad.length})...</span>`
           }
           if (searchInput && searchInput.value.trim() !== "") {
-            updateSearchResults(searchInput.value.toLowerCase().trim());
+            updateSearchResults(searchInput.value.toLowerCase().trim())
           }
         })
-        .catch(error => {
-          console.error(`加载数据文件 ${fileInfo.path} 失败:`, error);
-        })
-    );
+        .catch((error) => {
+          console.error(`加载数据文件 ${fileInfo.path} 失败:`, error)
+        }),
+    )
 
     try {
-      await Promise.all(promises);
-      databaseFullyLoaded = true;
-      console.log("所有数据库文件加载完成。总条目:", problemsData.length);
+      await Promise.all(promises)
+      databaseFullyLoaded = true
+      console.log("所有数据库文件加载完成。总条目:", problemsData.length)
     } catch (error) {
-      console.error("加载部分数据库文件时出错:", error);
+      console.error("加载部分数据库文件时出错:", error)
     } finally {
-      isDatabaseLoading = false;
-      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = 'none';
+      isDatabaseLoading = false
+      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = "none"
       if (searchInput && searchInput.value.trim() !== "") {
-        updateSearchResults(searchInput.value.toLowerCase().trim());
+        updateSearchResults(searchInput.value.toLowerCase().trim())
       }
     }
   }
 
   async function loadDatabaseIndex() {
     if (isDatabaseLoading && !databaseFullyLoaded) {
-      console.log("数据库已在加载中...");
-      return;
+      console.log("数据库已在加载中...")
+      return
     }
     if (databaseFullyLoaded) {
-      console.log("数据库已完全加载。");
-      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = 'none';
-      return;
+      console.log("数据库已完全加载。")
+      if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = "none"
+      return
     }
 
-    isDatabaseLoading = true;
-    databaseFullyLoaded = false;
-    problemsData = [];
-    loadedDataFileCount = 0;
-    dataFilesToLoad = [];
+    isDatabaseLoading = true
+    databaseFullyLoaded = false
+    problemsData = []
+    loadedDataFileCount = 0
+    dataFilesToLoad = []
 
     if (searchDatabaseLoadingEl) {
-      searchDatabaseLoadingEl.style.display = 'block';
-      searchDatabaseLoadingEl.querySelector('span').innerHTML = '<span><i class="loading-icon">🔄</i> 正在加载数据库索引...</span>';
+      searchDatabaseLoadingEl.style.display = "block"
+      searchDatabaseLoadingEl.querySelector("span").innerHTML =
+        '<span><i class="loading-icon">🔄</i> 正在加载数据库索引...</span>'
     }
 
     try {
-      const indexData = await fetchJson('database/index.json');
+      const indexData = await fetchJson("database/index.json")
       if (indexData && indexData.files && Array.isArray(indexData.files)) {
-        dataFilesToLoad = indexData.files;
+        dataFilesToLoad = indexData.files
         if (dataFilesToLoad.length > 0) {
-          await loadAllDataFiles();
+          await loadAllDataFiles()
         } else {
-          console.log("索引文件中没有数据文件列表。");
-          databaseFullyLoaded = true;
-          isDatabaseLoading = false;
-          if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = 'none';
+          console.log("索引文件中没有数据文件列表。")
+          databaseFullyLoaded = true
+          isDatabaseLoading = false
+          if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = "none"
         }
       } else {
-        throw new Error("数据库索引文件格式不正确。");
+        throw new Error("数据库索引文件格式不正确。")
       }
     } catch (error) {
-      console.error("加载数据库索引失败:", error);
-      isDatabaseLoading = false;
+      console.error("加载数据库索引失败:", error)
+      isDatabaseLoading = false
       if (searchDatabaseLoadingEl) {
-        searchDatabaseLoadingEl.querySelector('span').textContent = '数据库加载失败!';
+        searchDatabaseLoadingEl.querySelector("span").textContent = "数据库加载失败!"
       }
     }
   }
 
-  loadDatabaseIndex();
+  loadDatabaseIndex()
 
   const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)")
 
@@ -341,39 +344,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!searchTerm) {
       searchResults.style.display = "none"
-      searchNotFound.style.display = "none";
+      searchNotFound.style.display = "none"
       if (searchDatabaseLoadingEl && !databaseFullyLoaded) {
-        searchDatabaseLoadingEl.style.display = 'block';
+        searchDatabaseLoadingEl.style.display = "block"
       } else if (searchDatabaseLoadingEl) {
-        searchDatabaseLoadingEl.style.display = 'none';
+        searchDatabaseLoadingEl.style.display = "none"
       }
-      return;
+      return
     }
 
     // 如果数据库仍在加载，显示提示，但仍然执行搜索
     if (isDatabaseLoading && !databaseFullyLoaded && searchDatabaseLoadingEl) {
-      searchDatabaseLoadingEl.style.display = 'block';
+      searchDatabaseLoadingEl.style.display = "block"
     } else if (searchDatabaseLoadingEl) {
-      searchDatabaseLoadingEl.style.display = 'none';
+      searchDatabaseLoadingEl.style.display = "none"
     }
 
-    const currentProblemsToSearch = problemsData.length > 0 ? problemsData : []; // 使用已加载的数据
+    const currentProblemsToSearch = problemsData.length > 0 ? problemsData : [] // 使用已加载的数据
 
-    const matchedProblems = currentProblemsToSearch.filter(
-      (problem) => {
-        const titleMatch = problem && typeof problem.title === 'string' && problem.title.toLowerCase().includes(searchTerm);
-        const summaryMatch = problem && typeof problem.summary === 'string' && problem.summary.toLowerCase().includes(searchTerm);
-        return titleMatch || summaryMatch;
-      }
-    );
+    const matchedProblems = currentProblemsToSearch.filter((problem) => {
+      const titleMatch =
+        problem && typeof problem.title === "string" && problem.title.toLowerCase().includes(searchTerm)
+      const summaryMatch =
+        problem && typeof problem.summary === "string" && problem.summary.toLowerCase().includes(searchTerm)
+      return titleMatch || summaryMatch
+    })
 
     if (matchedProblems.length > 0) {
-      matchedProblems.forEach((problem) => {
+      matchedProblems.forEach((problem, index) => {
         const resultItem = document.createElement("a")
         resultItem.href = "#"
         resultItem.textContent = problem.title
         resultItem.dataset.url = problem.url
         resultItem.title = problem.title
+        // 设置动画顺序
+        resultItem.style.setProperty("--animation-order", index)
 
         resultItem.addEventListener("click", (event) => {
           event.preventDefault()
@@ -383,24 +388,49 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         searchResults.appendChild(resultItem)
       })
+
+      // 重置动画
+      searchResults.style.animation = "none"
+      searchResults.offsetHeight // 触发重排
+      searchResults.style.animation = null
+
       searchResults.style.display = "block"
       searchNotFound.style.display = "none"
     } else {
       searchResults.style.display = "none"
       if (searchTerm) {
         if (!databaseFullyLoaded && problemsData.length > 0) {
-          searchNotFound.innerHTML = `<p>正在搜索已加载的 ${problemsData.length} 条数据... 更多数据仍在后台加载中。</p>`;
+          searchNotFound.innerHTML = `<p>正在搜索已加载的 ${problemsData.length} 条数据... 更多数据仍在后台加载中。</p>`
         } else if (!databaseFullyLoaded && problemsData.length === 0) {
-          searchNotFound.innerHTML = `<p>数据库仍在加载中，请稍候或尝试刷新...</p>`;
-        }
-        else {
+          searchNotFound.innerHTML = `<p>数据库仍在加载中，请稍候或尝试刷新...</p>`
+        } else {
           // 这里为了代码标准通过没有实际代码
         }
-        searchNotFound.style.display = "block";
+
+        // 重置动画
+        searchNotFound.style.animation = "none"
+        searchNotFound.offsetHeight // 触发重排
+        searchNotFound.style.animation = null
+
+        searchNotFound.style.display = "block"
       } else {
-        searchNotFound.style.display = "none";
+        searchNotFound.style.display = "none"
       }
     }
+  }
+
+  // 为搜索框添加焦点动画
+  if (searchInput) {
+    searchInput.addEventListener("focus", () => {
+      searchInput.style.animation = "none"
+      searchInput.offsetHeight // 触发重排
+      searchInput.style.animation = "pulse-border 2s infinite alternate"
+      searchInput.style.transform = "scale(1.02)"
+    })
+
+    searchInput.addEventListener("blur", () => {
+      searchInput.style.transform = "scale(1)"
+    })
   }
 
   window.addEventListener("resize", () => {

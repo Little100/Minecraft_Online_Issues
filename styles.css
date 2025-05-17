@@ -239,8 +239,33 @@ body:not(.dark-mode) .header-app-title {
     font-size: 1em;
     background-color: var(--search-bg-dark);
     color: var(--text-color-dark);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    animation: pulse-border 2s infinite alternate;
+}
+
+@keyframes pulse-border {
+    0% {
+        border-color: var(--search-border-dark);
+    }
+
+    100% {
+        border-color: var(--accent-color-dark);
+    }
+}
+
+body:not(.dark-mode) #search-input {
+    animation: pulse-border-light 2s infinite alternate;
+}
+
+@keyframes pulse-border-light {
+    0% {
+        border-color: var(--search-border-light);
+    }
+
+    100% {
+        border-color: var(--accent-color-light);
+    }
 }
 
 body:not(.dark-mode) #search-input {
@@ -289,6 +314,20 @@ body:not(.dark-mode) #search-input::placeholder {
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform-origin: top center;
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scaleY(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
 }
 
 body:not(.dark-mode) .search-results,
@@ -302,10 +341,25 @@ body:not(.dark-mode) .search-not-found {
     padding: 12px 15px;
     color: var(--text-color-dark);
     border-bottom: 1px solid var(--border-color-dark);
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s, color 0.2s;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    animation: fadeIn 0.3s ease-in-out forwards;
+    animation-delay: calc(0.05s * var(--animation-order, 0));
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 body:not(.dark-mode) .search-results a {
