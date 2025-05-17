@@ -13,6 +13,8 @@
 - 您需要使用模板做出对应的html文件,
 > 不要修改javascript.js中的**problemsDatabase** 我们将会自己修改此文件,您只需要修改模板即可但是不要删除模板文件.
 
+> 您可以clone本项目到本地,修改模板文件,然后提交pull request。您可以使用我们提供的autogit.bat脚本来提交修改。
+
 ## Issue 规范
 请按照以下模板提交 issue：
 ```
