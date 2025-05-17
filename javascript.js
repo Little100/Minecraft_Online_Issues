@@ -207,6 +207,17 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenuToggle.addEventListener("click", () => {
       mobileMenuToggle.classList.toggle("active")
       sidebar.classList.toggle("active")
+
+      // Close sidebar when clicking outside on mobile
+      if (sidebar.classList.contains("active") && window.innerWidth <= 768) {
+        document.addEventListener("click", function closeSidebar(e) {
+          if (!sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
+            sidebar.classList.remove("active")
+            mobileMenuToggle.classList.remove("active")
+            document.removeEventListener("click", closeSidebar)
+          }
+        })
+      }
     })
   }
 
@@ -250,6 +261,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       contentArea.appendChild(fragment)
       contentArea.classList.add("loaded-content")
+
+      // Ensure proper scrolling to top on mobile when loading new content
+      window.scrollTo({ top: 0, behavior: "smooth" })
 
       if (searchResults) {
         searchResults.style.display = "none"
