@@ -1145,7 +1145,6 @@ body:not(.dark-mode) .search-database-loading button {
 .search-database-loading button:hover {
     background-color: var(--button-hover-bg-dark);
     transform: translateY(-1px);
-    /* Slight lift on hover */
 }
 
 body:not(.dark-mode) .search-database-loading button:hover {
