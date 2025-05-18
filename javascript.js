@@ -8,17 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.querySelector(".sidebar")
   const loadingScreen = document.getElementById("loading-screen")
 
-  let sidebarNavigations = null
   let navLinks = []
 
-  if (sidebar) {
-    sidebarNavigations = sidebar.querySelectorAll("nav")
-    if (sidebarNavigations && sidebarNavigations.length > 0) {
-      sidebarNavigations.forEach((nav) => {
-        navLinks = navLinks.concat(Array.from(nav.querySelectorAll("a")))
-      })
-    }
-  }
+  const staticProblemIdsToExclude = ["online1", "online2", "online3", "caidan"];
 
   const searchInput = document.getElementById("search-input")
   const searchResults = document.getElementById("search-results")
@@ -104,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await Promise.all(promises)
       databaseFullyLoaded = true
       console.log("所有数据库文件加载完成。总条目:", problemsData.length)
+      populateSidebarNavigation(problemsData)
     } catch (error) {
       console.error("加载部分数据库文件时出错:", error)
     } finally {
@@ -111,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (searchDatabaseLoadingEl) searchDatabaseLoadingEl.style.display = "none"
       if (searchInput && searchInput.value.trim() !== "") {
         updateSearchResults(searchInput.value.toLowerCase().trim())
+        filterSidebar(searchInput.value.toLowerCase().trim())
       }
     }
   }
@@ -162,6 +156,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function populateSidebarNavigation(problems) {
+    const problemNavElement = document.getElementById("problem-navigation");
+    if (!problemNavElement) {
+      console.error("Problem navigation element (#problem-navigation) not found.");
+      return;
+    }
+
+    let ulElement = problemNavElement.querySelector("ul");
+    if (!ulElement) {
+      console.warn("UL element not found in #problem-navigation, creating one.");
+      ulElement = document.createElement("ul");
+      problemNavElement.appendChild(ulElement);
+    }
+
+    ulElement.innerHTML = "";
+
+    const dynamicallyAddedLinks = [];
+
+    problems.forEach(problem => {
+      if (problem.id && staticProblemIdsToExclude.includes(String(problem.id).toLowerCase())) {
+        return;
+      }
+
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#";
+      a.dataset.page = problem.url;
+      a.textContent = problem.title;
+      a.title = problem.title;
+
+      li.appendChild(a);
+      ulElement.appendChild(li);
+      dynamicallyAddedLinks.push(a);
+    });
+    navLinks = navLinks.concat(dynamicallyAddedLinks);
+    collectAllNavLinks();
+  }
+
+  function collectAllNavLinks() {
+    navLinks = Array.from(document.querySelectorAll('.sidebar nav a[data-page]'));
+  }
+
+  function handleSidebarClick(event) {
+    const clickedLink = event.target.closest('a[data-page]');
+    if (!clickedLink) {
+      return;
+    }
+    if (!sidebar || !sidebar.contains(clickedLink)) {
+      return;
+    }
+
+    event.preventDefault();
+    const page = clickedLink.dataset.page;
+    if (page) {
+      loadPage(page, clickedLink);
+      if (searchInput) searchInput.value = "";
+      if (searchNotFound) searchNotFound.style.display = "none";
+      if (searchResults) searchResults.style.display = "none";
+    }
+  }
+  collectAllNavLinks();
+  if (sidebar) {
+    sidebar.addEventListener('click', handleSidebarClick);
+  }
+
+
   loadDatabaseIndex()
 
   const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -208,7 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenuToggle.classList.toggle("active")
       sidebar.classList.toggle("active")
 
-      // Close sidebar when clicking outside on mobile
       if (sidebar.classList.contains("active") && window.innerWidth <= 768) {
         document.addEventListener("click", function closeSidebar(e) {
           if (!sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
@@ -262,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
       contentArea.appendChild(fragment)
       contentArea.classList.add("loaded-content")
 
-      // Ensure proper scrolling to top on mobile when loading new content
       window.scrollTo({ top: 0, behavior: "smooth" })
 
       if (searchResults) {
@@ -300,19 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
       contentArea.innerHTML = errorMessage
     }
   }
-
-  navLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault()
-      const page = link.dataset.page
-      if (page) {
-        loadPage(page, link)
-        if (searchInput) searchInput.value = ""
-        if (searchNotFound) searchNotFound.style.display = "none"
-        if (searchResults) searchResults.style.display = "none"
-      }
-    })
-  })
 
   if (searchInput) {
     searchInput.addEventListener("input", (event) => {
@@ -367,14 +412,13 @@ document.addEventListener("DOMContentLoaded", () => {
       return
     }
 
-    // 如果数据库仍在加载，显示提示，但仍然执行搜索
     if (isDatabaseLoading && !databaseFullyLoaded && searchDatabaseLoadingEl) {
       searchDatabaseLoadingEl.style.display = "block"
     } else if (searchDatabaseLoadingEl) {
       searchDatabaseLoadingEl.style.display = "none"
     }
 
-    const currentProblemsToSearch = problemsData.length > 0 ? problemsData : [] // 使用已加载的数据
+    const currentProblemsToSearch = problemsData.length > 0 ? problemsData : []
 
     const matchedProblems = currentProblemsToSearch.filter((problem) => {
       const titleMatch =
@@ -391,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
         resultItem.textContent = problem.title
         resultItem.dataset.url = problem.url
         resultItem.title = problem.title
-        // 设置动画顺序
         resultItem.style.setProperty("--animation-order", index)
 
         resultItem.addEventListener("click", (event) => {
@@ -403,9 +446,8 @@ document.addEventListener("DOMContentLoaded", () => {
         searchResults.appendChild(resultItem)
       })
 
-      // 重置动画
       searchResults.style.animation = "none"
-      searchResults.offsetHeight // 触发重排
+      searchResults.offsetHeight
       searchResults.style.animation = null
 
       searchResults.style.display = "block"
@@ -418,12 +460,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (!databaseFullyLoaded && problemsData.length === 0) {
           searchNotFound.innerHTML = `<p>数据库仍在加载中，请稍候或尝试刷新...</p>`
         } else {
-          // 这里为了代码标准通过没有实际代码
+          // 这里为了代码正常运行通过没有实际代码
         }
 
-        // 重置动画
         searchNotFound.style.animation = "none"
-        searchNotFound.offsetHeight // 触发重排
+        searchNotFound.offsetHeight
         searchNotFound.style.animation = null
 
         searchNotFound.style.display = "block"
@@ -433,11 +474,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 为搜索框添加焦点动画
   if (searchInput) {
     searchInput.addEventListener("focus", () => {
       searchInput.style.animation = "none"
-      searchInput.offsetHeight // 触发重排
+      searchInput.offsetHeight
       searchInput.style.animation = "pulse-border 2s infinite alternate"
       searchInput.style.transform = "scale(1.02)"
     })
@@ -462,8 +502,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 500)
     }
   }, 1500)
-
-  navLinks.forEach((link) => {
-    link.title = link.textContent
-  })
 })

@@ -1,6 +1,11 @@
 {
   "problems": [
     {
+      "id": "caidan",
+      "title": "这是一个彩蛋哦",
+      "summary": "彩蛋"
+    },
+    {
       "id": "online1",
       "title": "FRP[内网穿透]",
       "summary": "使用内网穿透连接到服务器,FRP,内网穿透,联机",
@@ -23,6 +28,12 @@
       "title": "身份验证失败",
       "summary": "身份验证失败,重启客户端",
       "url": "subpages/authfailed.html"
+    },
+    {
+      "id": "problem2",
+      "title": "Ticking Entity",
+      "summary": "Tiking,ticking exception,ticking entity",
+      "url": "subpages/ticking.html"
     }
   ]
 }

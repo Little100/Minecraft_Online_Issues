@@ -1159,7 +1159,6 @@ body:not(.dark-mode) #fixed-theme-toggle {
         right: 0;
     }
 
-    /* Fix for the loading database message */
     .search-database-loading {
         width: 100%;
         flex-direction: column;
@@ -1194,27 +1193,23 @@ body:not(.dark-mode) #fixed-theme-toggle {
     }
 }
 
-/* Improve touch targets for mobile */
 #problem-navigation ul li a,
 #connection-navigation ul li a {
     padding: 14px 15px;
     margin-bottom: 10px;
 }
 
-/* Improve scrolling on mobile */
 .sidebar,
 .content,
 body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Fix image scaling on mobile */
 img {
     max-width: 100%;
     height: auto;
 }
 
-/* Improve tap targets */
 button,
 a {
     min-height: 44px;
@@ -1222,7 +1217,6 @@ a {
     align-items: center;
 }
 
-/* Fix for search results on mobile */
 .search-results a {
     padding: 14px 15px;
 }
@@ -1284,4 +1278,42 @@ body:not(.dark-mode) .search-database-loading button {
 
 body:not(.dark-mode) .search-database-loading button:hover {
     background-color: var(--button-hover-bg-light);
+}
+
+.contributor-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color-dark);
+    text-align: right;
+    font-size: 0.9em;
+    color: var(--text-color-dark);
+}
+
+body:not(.dark-mode) .contributor-section {
+    border-top-color: var(--border-color-light);
+    color: var(--text-color-light);
+}
+
+.contributor-section p {
+    margin: 0;
+}
+
+.contributor-section .contributor-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.contributor-section .contributor-name {
+    color: var(--accent-color-dark);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+body:not(.dark-mode) .contributor-section .contributor-name {
+    color: var(--accent-color-light);
+}
+
+.contributor-section .contributor-name:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
 }
