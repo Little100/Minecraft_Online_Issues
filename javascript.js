@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let navLinks = []
 
-  const staticProblemIdsToExclude = ["online1", "online2", "online3", "caidan"];
+  const staticProblemIdsToExclude = ["online1", "online2", "online3", "online4","caidan"];
 
   const searchInput = document.getElementById("search-input")
   const searchResults = document.getElementById("search-results")
@@ -97,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
       databaseFullyLoaded = true
       console.log("所有数据库文件加载完成。总条目:", problemsData.length)
       populateSidebarNavigation(problemsData)
+      if (problemsData && problemsData.length > 0) {
+        calculateAndDisplaySubpageContributors(problemsData);
+      }
     } catch (error) {
       console.error("加载部分数据库文件时出错:", error)
     } finally {
@@ -564,6 +567,68 @@ document.addEventListener("DOMContentLoaded", () => {
       contributionsText.textContent = `贡献: ${contributor.contributions}`;
 
       card.appendChild(avatar);
+      card.appendChild(loginLink);
+      card.appendChild(contributionsText);
+      container.appendChild(card);
+    });
+  }
+
+  function calculateAndDisplaySubpageContributors(allProblemsData) {
+    const container = document.getElementById("subpage-contributors-list-container");
+    if (!container) {
+      console.error("Subpage contributors container #subpage-contributors-list-container not found.");
+      return;
+    }
+
+    if (!allProblemsData || !Array.isArray(allProblemsData) || allProblemsData.length === 0) {
+      container.innerHTML = "<p>暂无子页面贡献数据。</p>";
+      return;
+    }
+
+    const authorCounts = {};
+    allProblemsData.forEach(problem => {
+      if (problem.authors && Array.isArray(problem.authors)) {
+        problem.authors.forEach(authorName => {
+          if (typeof authorName === 'string' && authorName.trim() !== '') {
+            const cleanAuthorName = authorName.trim();
+            authorCounts[cleanAuthorName] = (authorCounts[cleanAuthorName] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    if (authorCounts['Little_100']) {
+      authorCounts['Little100'] = (authorCounts['Little100'] || 0) + authorCounts['Little_100'];
+      delete authorCounts['Little_100'];
+    }
+
+    if (Object.keys(authorCounts).length === 0) {
+      const loadingMessage = container.querySelector('p.loading-contributors');
+      if (loadingMessage) loadingMessage.textContent = "未在子页面数据中找到作者信息。";
+      return;
+    }
+
+    const sortedAuthors = Object.entries(authorCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    container.innerHTML = ""; // Clear "loading..."
+
+    sortedAuthors.forEach(author => {
+      const card = document.createElement("div");
+      card.className = "contributor-card";
+
+      const loginLink = document.createElement("a");
+      loginLink.href = `https://github.com/${author.name}`;
+      loginLink.target = "_blank";
+      loginLink.rel = "noopener noreferrer";
+      loginLink.className = "contributor-login";
+      loginLink.textContent = author.name;
+
+      const contributionsText = document.createElement("p");
+      contributionsText.className = "contributor-contributions";
+      contributionsText.textContent = `子页面贡献: ${author.count}`;
+
       card.appendChild(loginLink);
       card.appendChild(contributionsText);
       container.appendChild(card);

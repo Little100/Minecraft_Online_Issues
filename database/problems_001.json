@@ -3,43 +3,58 @@
     {
       "id": "caidan",
       "title": "这是一个彩蛋哦",
-      "summary": "彩蛋"
+      "summary": "彩蛋,caidan,Little_100,furry,男同,正太,受",
+      "url": "subpages/caidan.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "online1",
       "title": "FRP[内网穿透]",
       "summary": "使用内网穿透连接到服务器,FRP,内网穿透,联机",
-      "url": "subpages/frp.html"
+      "url": "subpages/frp.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "online2",
       "title": "p2p",
       "summary": "p2p,点对点,联机",
-      "url": "subpages/p2p.html"
+      "url": "subpages/p2p.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "online3",
       "title": "ipv6",
       "summary": "ipv6,联机",
-      "url": "subpages/ipv6.html"
+      "url": "subpages/ipv6.html",
+      "authors": ["Little_100"]
+    },
+    {
+      "id": "online4",
+      "title": "SRV记录",
+      "summary": "SRV,隐藏端口,端口,联机",
+      "url": "subpages/SRV.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "problem1",
       "title": "身份验证失败",
       "summary": "身份验证失败,重启客户端",
-      "url": "subpages/authfailed.html"
+      "url": "subpages/authfailed.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "problem2",
       "title": "Ticking Entity",
       "summary": "Tiking,ticking exception,ticking entity",
-      "url": "subpages/ticking.html"
+      "url": "subpages/ticking.html",
+      "authors": ["Little_100"]
     },
     {
       "id": "problem3",
       "title": "getsockopt",
       "summary": "getsocpet,connection refused,connect refused: getsocopt",
-      "url": "subpages/getsockot.html"
+      "url": "subpages/getsockot.html",
+      "authors": ["Little_100"]
     }
   ]
 }
