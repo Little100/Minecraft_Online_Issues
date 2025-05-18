@@ -502,17 +502,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 500)
     }
   }, 1500)
-  async function fetchProjectContributors(owner, repo) {
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contributors`;
+  async function fetchProjectContributors() {
+    const localContributorsJsonUrl = 'database/contributors.json';
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(localContributorsJsonUrl + '?v=' + new Date().getTime());
       if (!response.ok) {
-        throw new Error(`GitHub API error! status: ${response.status} for ${apiUrl}`);
+        throw new Error(`Failed to load local contributors data! Status: ${response.status} from ${localContributorsJsonUrl}`);
       }
       const contributors = await response.json();
       return contributors;
     } catch (error) {
-      console.error("Failed to fetch project contributors:", error);
+      console.error("Failed to fetch local project contributors:", error);
+      const container = document.getElementById("contributors-list-container");
+      if (container) {
+        container.innerHTML = "<p>贡献者信息暂时无法加载。请检查您的网络连接或稍后再试。</p>";
+      }
       return null;
     }
   }
@@ -524,10 +528,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!contributorsData || contributorsData.length === 0) {
-      container.innerHTML = "<p>未能加载贡献者信息或暂无贡献者。</p>";
+    if (!contributorsData || !Array.isArray(contributorsData) || contributorsData.length === 0) {
+      container.innerHTML = "<p>暂无贡献者信息或数据加载失败。</p>";
       return;
     }
+
+    contributorsData.sort((a, b) => b.contributions - a.contributions);
 
     container.innerHTML = "";
 
@@ -564,10 +570,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const GITHUB_OWNER = "Little100";
-  const GITHUB_REPO = "Minecraft_Online_Issues";
-
-  fetchProjectContributors(GITHUB_OWNER, GITHUB_REPO)
+  fetchProjectContributors()
     .then(contributors => {
       if (contributors) {
         displayContributors(contributors);

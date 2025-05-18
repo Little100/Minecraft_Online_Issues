@@ -1,0 +1,51 @@
+name: Update Contributors List
+
+on:
+  schedule:
+  - cron: '0 0 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+    - 'scripts/fetch-contributors.js'
+    - 'package.json'
+    - 'package-lock.json'
+
+jobs:
+  update_data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Fetch and write contributors data
+      run: node scripts/fetch-contributors.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit and push if changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add database/contributors.json
+        # Check if there are staged changes
+        if ! git diff --staged --quiet; then
+          git commit -m "Automated: Update contributors.json"
+          echo "Pushing changes..."
+          git push
+        else
+          echo "No changes to contributors.json. Nothing to commit."
+        fi

@@ -1,0 +1,55 @@
+<article class="problem-details">
+    <h2>Getsockopt</h2>
+    <p class="problem-summary">具体可能表现为Connection refused: getsockopt 即下图所示。</p>
+
+    <section class="solution-steps">
+        <h3>解决方案：</h3>
+        <ol>
+            <li>
+                <strong>抱歉,这个问题无法解决,您只能通过检查您的环境或者服务器的环境来解决这个问题。</strong> 详细检查步骤如下
+                <figure>
+                    <img src="../images/getsockopt.jpg" alt="步骤截图示例" style="max-width: 100%; height: auto;">
+                    <figcaption>图示</figcaption>
+                </figure>
+            </li>
+            <li>
+                <strong>步骤一：</strong> 检查您是否开启了代理模式
+                <figure>
+                    <img src="../images/windowsproxy.png" alt="步骤截图示例" style="max-width: 100%; height: auto;">
+                    <figcaption>图示</figcaption>
+                </figure>
+            </li>
+            <li>
+                <strong>步骤二：</strong> 检查您是否输入了正确的ip地址
+                <pre><code class="language-plaintext">比如您的服务器ip地址是111.222.333.444端口为25565,那么您应该输入的ip是111.222.333.444:25565记住":"是英文的而不是"："中文的冒号,此外如果您使用的ipv6地址请记得使用[ipv6地址]来包裹您的v6地址.</code></pre>
+            </li>
+            <li>
+                <strong>步骤三：</strong> 检查您的防火墙是否拦截请求,如果您不需要防火墙这种东西我们建议您关闭
+            </li>
+            <li>
+                <strong>步骤四：</strong> 检查服务器ip是否正确,具体操作应该是在cmd中运行命令
+                <pre><code class="language-plaintext">ping 服务器ip地址 如果出现Ping 请求找不到主机则说明服务器ip地址不正确。</code></pre>
+            </li>
+            <li>
+                <strong>步骤五：</strong> 检查端口是否匹配,比如您可能使用了临时地址而服务器那边关闭了临时地址,请您询问腐竹新的ip
+            </li>
+        </ol>
+    </section>
+
+    <section class="common-causes">
+        <h3>可能原因：</h3>
+        <ul>
+            <li>原因一：您开了代理模式</li>
+            <li>原因二：防火墙拦截</li>
+            <li>原因三：服务器ip地址不正确</li>
+            <li>原因四：端口不匹配</li>
+        </ul>
+    </section>
+
+    <div class="contributor-section">
+        <p>
+            <span class="contributor-label">本页面贡献者:</span>
+            <a href="https://github.com/Little100" class="contributor-name" target="_blank" rel="noopener noreferrer">Little_100</a>
+        </p>
+    </div>
+</article>

@@ -1,0 +1,21 @@
+{
+  "name": "minecraft-online-issues-contributors",
+  "version": "1.0.0",
+  "description": "Script to fetch GitHub contributors for the Minecraft Online Issues project.",
+  "main": "scripts/fetch-contributors.js",
+  "scripts": {
+    "fetch-contributors": "node scripts/fetch-contributors.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "github",
+    "contributors",
+    "api"
+  ],
+  "author": "Little_100",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^20.0.0",
+    "node-fetch": "^2.6.7"
+  }
+}

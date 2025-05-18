@@ -34,6 +34,12 @@
       "title": "Ticking Entity",
       "summary": "Tiking,ticking exception,ticking entity",
       "url": "subpages/ticking.html"
+    },
+    {
+      "id": "problem3",
+      "title": "getsockopt",
+      "summary": "getsocpet,connection refused,connect refused: getsocopt",
+      "url": "subpages/getsockot.html"
     }
   ]
 }
