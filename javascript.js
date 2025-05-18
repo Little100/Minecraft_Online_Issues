@@ -502,4 +502,75 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 500)
     }
   }, 1500)
+  async function fetchProjectContributors(owner, repo) {
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contributors`;
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`GitHub API error! status: ${response.status} for ${apiUrl}`);
+      }
+      const contributors = await response.json();
+      return contributors;
+    } catch (error) {
+      console.error("Failed to fetch project contributors:", error);
+      return null;
+    }
+  }
+
+  function displayContributors(contributorsData) {
+    const container = document.getElementById("contributors-list-container");
+    if (!container) {
+      console.error("Contributors container #contributors-list-container not found.");
+      return;
+    }
+
+    if (!contributorsData || contributorsData.length === 0) {
+      container.innerHTML = "<p>未能加载贡献者信息或暂无贡献者。</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    contributorsData.forEach(contributor => {
+      if (contributor.type !== "User") return;
+
+      const card = document.createElement("div");
+      card.className = "contributor-card";
+
+      const avatar = document.createElement("img");
+      avatar.src = contributor.avatar_url;
+      avatar.alt = `${contributor.login} avatar`;
+      avatar.className = "contributor-avatar";
+      avatar.onerror = () => {
+        avatar.src = 'images/minecraft-logo.png';
+        avatar.alt = 'Avatar placeholder';
+      };
+
+      const loginLink = document.createElement("a");
+      loginLink.href = contributor.html_url;
+      loginLink.target = "_blank";
+      loginLink.rel = "noopener noreferrer";
+      loginLink.className = "contributor-login";
+      loginLink.textContent = contributor.login;
+
+      const contributionsText = document.createElement("p");
+      contributionsText.className = "contributor-contributions";
+      contributionsText.textContent = `贡献: ${contributor.contributions}`;
+
+      card.appendChild(avatar);
+      card.appendChild(loginLink);
+      card.appendChild(contributionsText);
+      container.appendChild(card);
+    });
+  }
+
+  const GITHUB_OWNER = "Little100";
+  const GITHUB_REPO = "Minecraft_Online_Issues";
+
+  fetchProjectContributors(GITHUB_OWNER, GITHUB_REPO)
+    .then(contributors => {
+      if (contributors) {
+        displayContributors(contributors);
+      }
+    });
 })
