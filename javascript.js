@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let navLinks = []
 
-  const staticProblemIdsToExclude = ["online1", "online2", "online3", "online4","caidan"];
+  const staticProblemIdsToExclude = ["online1", "online2", "online3", "online4", "caidan"]
 
   const searchInput = document.getElementById("search-input")
   const searchResults = document.getElementById("search-results")
@@ -98,8 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("所有数据库文件加载完成。总条目:", problemsData.length)
       populateSidebarNavigation(problemsData)
       if (problemsData && problemsData.length > 0) {
-        calculateAndDisplaySubpageContributors(problemsData);
+        calculateAndDisplaySubpageContributors(problemsData)
       }
+      collectAllNavLinks()
+
+      loadPageFromHash()
+      window.addEventListener("hashchange", loadPageFromHash)
     } catch (error) {
       console.error("加载部分数据库文件时出错:", error)
     } finally {
@@ -160,70 +164,100 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function populateSidebarNavigation(problems) {
-    const problemNavElement = document.getElementById("problem-navigation");
+    const problemNavElement = document.getElementById("problem-navigation")
     if (!problemNavElement) {
-      console.error("Problem navigation element (#problem-navigation) not found.");
-      return;
+      console.error("Problem navigation element (#problem-navigation) not found.")
+      return
     }
 
-    let ulElement = problemNavElement.querySelector("ul");
+    let ulElement = problemNavElement.querySelector("ul")
     if (!ulElement) {
-      console.warn("UL element not found in #problem-navigation, creating one.");
-      ulElement = document.createElement("ul");
-      problemNavElement.appendChild(ulElement);
+      console.warn("UL element not found in #problem-navigation, creating one.")
+      ulElement = document.createElement("ul")
+      problemNavElement.appendChild(ulElement)
     }
 
-    ulElement.innerHTML = "";
+    ulElement.innerHTML = ""
 
-    const dynamicallyAddedLinks = [];
+    const dynamicallyAddedLinks = []
 
-    problems.forEach(problem => {
+    problems.forEach((problem) => {
       if (problem.id && staticProblemIdsToExclude.includes(String(problem.id).toLowerCase())) {
-        return;
+        return
       }
 
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = "#";
-      a.dataset.page = problem.url;
-      a.textContent = problem.title;
-      a.title = problem.title;
+      const li = document.createElement("li")
+      const a = document.createElement("a")
+      a.href = "#"
+      a.dataset.page = problem.url
+      a.textContent = problem.title
+      a.title = problem.title
 
-      li.appendChild(a);
-      ulElement.appendChild(li);
-      dynamicallyAddedLinks.push(a);
-    });
-    navLinks = navLinks.concat(dynamicallyAddedLinks);
-    collectAllNavLinks();
+      li.appendChild(a)
+      ulElement.appendChild(li)
+      dynamicallyAddedLinks.push(a)
+    })
+    navLinks = navLinks.concat(dynamicallyAddedLinks)
+    collectAllNavLinks()
   }
 
   function collectAllNavLinks() {
-    navLinks = Array.from(document.querySelectorAll('.sidebar nav a[data-page]'));
+    navLinks = Array.from(document.querySelectorAll(".sidebar nav a[data-page]"))
   }
 
   function handleSidebarClick(event) {
-    const clickedLink = event.target.closest('a[data-page]');
+    const clickedLink = event.target.closest("a[data-page]")
     if (!clickedLink) {
-      return;
+      return
     }
     if (!sidebar || !sidebar.contains(clickedLink)) {
-      return;
+      return
     }
 
-    event.preventDefault();
-    const page = clickedLink.dataset.page;
+    event.preventDefault()
+    const page = clickedLink.dataset.page
     if (page) {
-      loadPage(page, clickedLink);
-      if (searchInput) searchInput.value = "";
-      if (searchNotFound) searchNotFound.style.display = "none";
-      if (searchResults) searchResults.style.display = "none";
+      if (window.location.hash !== `#${page}`) {
+        window.location.hash = page
+      } else {
+        // 这里什么都没有...
+      }
+      if (searchInput) searchInput.value = ""
+      if (searchNotFound) searchNotFound.style.display = "none"
+      if (searchResults) searchResults.style.display = "none"
     }
   }
-  collectAllNavLinks();
-  if (sidebar) {
-    sidebar.addEventListener('click', handleSidebarClick);
+
+  function loadPageFromHash() {
+    if (navLinks.length === 0) {
+      console.warn("loadPageFromHash called before navLinks were fully populated.")
+    }
+
+    const hash = window.location.hash.substring(1)
+    if (hash) {
+      const linkElement = navLinks.find((a) => a.dataset.page === hash)
+
+      if (linkElement) {
+        console.log(`Loading page from hash: ${hash}, found link element.`)
+        loadPage(hash, linkElement)
+      } else {
+        console.log(
+          `Loading page from hash: ${hash}, no corresponding link element found. Attempting to load directly.`,
+        )
+        loadPage(hash, null)
+      }
+      if (searchInput) searchInput.value = ""
+      if (searchNotFound) searchNotFound.style.display = "none"
+      if (searchResults) searchResults.style.display = "none"
+    } else {
+      console.log("No hash found, displaying default content.")
+    }
   }
 
+  collectAllNavLinks()
+  if (sidebar) {
+    sidebar.addEventListener("click", handleSidebarClick)
+  }
 
   loadDatabaseIndex()
 
@@ -266,21 +300,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener("click", () => {
-      mobileMenuToggle.classList.toggle("active")
-      sidebar.classList.toggle("active")
+  if (mobileMenuToggle && sidebar) {
+    mobileMenuToggle.addEventListener("click", (e) => {
+      e.stopPropagation()
+      e.preventDefault()
 
-      if (sidebar.classList.contains("active") && window.innerWidth <= 768) {
-        document.addEventListener("click", function closeSidebar(e) {
-          if (!sidebar.contains(e.target) && e.target !== mobileMenuToggle) {
-            sidebar.classList.remove("active")
-            mobileMenuToggle.classList.remove("active")
-            document.removeEventListener("click", closeSidebar)
+      mobileMenuToggle.classList.toggle("active");
+      sidebar.classList.toggle("active");
+
+      if (sidebar.classList.contains("active")) {
+        document.body.classList.add("body-no-scroll-when-sidebar-is-active");
+        document.addEventListener("click", function closeSidebarOnClickOutside(event) {
+          if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target) && event.target !== mobileMenuToggle) {
+            sidebar.classList.remove("active");
+            mobileMenuToggle.classList.remove("active");
+            document.body.classList.remove("body-no-scroll-when-sidebar-is-active");
+            document.removeEventListener("click", closeSidebarOnClickOutside);
           }
-        })
+        });
+      } else {
+        document.body.classList.remove("body-no-scroll-when-sidebar-is-active");
       }
     })
+  } else {
+    console.error("Mobile menu toggle or sidebar element not found.")
   }
 
   async function loadPage(pageUrl, linkElement) {
@@ -331,8 +374,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (sidebar.classList.contains("active") && window.innerWidth <= 768) {
-        sidebar.classList.remove("active")
-        mobileMenuToggle.classList.remove("active")
+        sidebar.classList.remove("active");
+        mobileMenuToggle.classList.remove("active");
+        document.body.classList.remove("body-no-scroll-when-sidebar-is-active");
       }
     } catch (error) {
       let errorMessage = `
@@ -506,139 +550,140 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 1500)
   async function fetchProjectContributors() {
-    const localContributorsJsonUrl = 'database/contributors.json';
+    const localContributorsJsonUrl = "database/contributors.json"
     try {
-      const response = await fetch(localContributorsJsonUrl + '?v=' + new Date().getTime());
+      const response = await fetch(localContributorsJsonUrl + "?v=" + new Date().getTime())
       if (!response.ok) {
-        throw new Error(`Failed to load local contributors data! Status: ${response.status} from ${localContributorsJsonUrl}`);
+        throw new Error(
+          `Failed to load local contributors data! Status: ${response.status} from ${localContributorsJsonUrl}`,
+        )
       }
-      const contributors = await response.json();
-      return contributors;
+      const contributors = await response.json()
+      return contributors
     } catch (error) {
-      console.error("Failed to fetch local project contributors:", error);
-      const container = document.getElementById("contributors-list-container");
+      console.error("Failed to fetch local project contributors:", error)
+      const container = document.getElementById("contributors-list-container")
       if (container) {
-        container.innerHTML = "<p>贡献者信息暂时无法加载。请检查您的网络连接或稍后再试。</p>";
+        container.innerHTML = "<p>贡献者信息暂时无法加载。请检查您的网络连接或稍后再试。</p>"
       }
-      return null;
+      return null
     }
   }
 
   function displayContributors(contributorsData) {
-    const container = document.getElementById("contributors-list-container");
+    const container = document.getElementById("contributors-list-container")
     if (!container) {
-      console.error("Contributors container #contributors-list-container not found.");
-      return;
+      console.error("Contributors container #contributors-list-container not found.")
+      return
     }
 
     if (!contributorsData || !Array.isArray(contributorsData) || contributorsData.length === 0) {
-      container.innerHTML = "<p>暂无贡献者信息或数据加载失败。</p>";
-      return;
+      container.innerHTML = "<p>暂无贡献者信息或数据加载失败。</p>"
+      return
     }
 
-    contributorsData.sort((a, b) => b.contributions - a.contributions);
+    contributorsData.sort((a, b) => b.contributions - a.contributions)
 
-    container.innerHTML = "";
+    container.innerHTML = ""
 
-    contributorsData.forEach(contributor => {
-      if (contributor.type !== "User") return;
+    contributorsData.forEach((contributor) => {
+      if (contributor.type !== "User") return
 
-      const card = document.createElement("div");
-      card.className = "contributor-card";
+      const card = document.createElement("div")
+      card.className = "contributor-card"
 
-      const avatar = document.createElement("img");
-      avatar.src = contributor.avatar_url;
-      avatar.alt = `${contributor.login} avatar`;
-      avatar.className = "contributor-avatar";
+      const avatar = document.createElement("img")
+      avatar.src = contributor.avatar_url
+      avatar.alt = `${contributor.login} avatar`
+      avatar.className = "contributor-avatar"
+      avatar.loading = "lazy"
       avatar.onerror = () => {
-        avatar.src = 'images/minecraft-logo.png';
-        avatar.alt = 'Avatar placeholder';
-      };
+        avatar.src = "images/minecraft-logo.png"
+        avatar.alt = "Avatar placeholder"
+      }
 
-      const loginLink = document.createElement("a");
-      loginLink.href = contributor.html_url;
-      loginLink.target = "_blank";
-      loginLink.rel = "noopener noreferrer";
-      loginLink.className = "contributor-login";
-      loginLink.textContent = contributor.login;
+      const loginLink = document.createElement("a")
+      loginLink.href = contributor.html_url
+      loginLink.target = "_blank"
+      loginLink.rel = "noopener noreferrer"
+      loginLink.className = "contributor-login"
+      loginLink.textContent = contributor.login
 
-      const contributionsText = document.createElement("p");
-      contributionsText.className = "contributor-contributions";
-      contributionsText.textContent = `贡献: ${contributor.contributions}`;
+      const contributionsText = document.createElement("p")
+      contributionsText.className = "contributor-contributions"
+      contributionsText.textContent = `贡献: ${contributor.contributions}`
 
-      card.appendChild(avatar);
-      card.appendChild(loginLink);
-      card.appendChild(contributionsText);
-      container.appendChild(card);
-    });
+      card.appendChild(avatar)
+      card.appendChild(loginLink)
+      card.appendChild(contributionsText)
+      container.appendChild(card)
+    })
   }
 
   function calculateAndDisplaySubpageContributors(allProblemsData) {
-    const container = document.getElementById("subpage-contributors-list-container");
+    const container = document.getElementById("subpage-contributors-list-container")
     if (!container) {
-      console.error("Subpage contributors container #subpage-contributors-list-container not found.");
-      return;
+      console.error("Subpage contributors container #subpage-contributors-list-container not found.")
+      return
     }
 
     if (!allProblemsData || !Array.isArray(allProblemsData) || allProblemsData.length === 0) {
-      container.innerHTML = "<p>暂无子页面贡献数据。</p>";
-      return;
+      container.innerHTML = "<p>暂无子页面贡献数据。</p>"
+      return
     }
 
-    const authorCounts = {};
-    allProblemsData.forEach(problem => {
+    const authorCounts = {}
+    allProblemsData.forEach((problem) => {
       if (problem.authors && Array.isArray(problem.authors)) {
-        problem.authors.forEach(authorName => {
-          if (typeof authorName === 'string' && authorName.trim() !== '') {
-            const cleanAuthorName = authorName.trim();
-            authorCounts[cleanAuthorName] = (authorCounts[cleanAuthorName] || 0) + 1;
+        problem.authors.forEach((authorName) => {
+          if (typeof authorName === "string" && authorName.trim() !== "") {
+            const cleanAuthorName = authorName.trim()
+            authorCounts[cleanAuthorName] = (authorCounts[cleanAuthorName] || 0) + 1
           }
-        });
+        })
       }
-    });
+    })
 
-    if (authorCounts['Little_100']) {
-      authorCounts['Little100'] = (authorCounts['Little100'] || 0) + authorCounts['Little_100'];
-      delete authorCounts['Little_100'];
+    if (authorCounts["Little_100"]) {
+      authorCounts["Little100"] = (authorCounts["Little100"] || 0) + authorCounts["Little_100"]
+      delete authorCounts["Little_100"]
     }
 
     if (Object.keys(authorCounts).length === 0) {
-      const loadingMessage = container.querySelector('p.loading-contributors');
-      if (loadingMessage) loadingMessage.textContent = "未在子页面数据中找到作者信息。";
-      return;
+      container.innerHTML = "<p>未在子页面数据中找到作者信息。</p>"
+      return
     }
 
     const sortedAuthors = Object.entries(authorCounts)
       .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => b.count - a.count)
 
-    container.innerHTML = ""; // Clear "loading..."
+    container.innerHTML = ""
 
-    sortedAuthors.forEach(author => {
-      const card = document.createElement("div");
-      card.className = "contributor-card";
+    sortedAuthors.forEach((author) => {
+      const card = document.createElement("div")
+      card.className = "contributor-card"
 
-      const loginLink = document.createElement("a");
-      loginLink.href = `https://github.com/${author.name}`;
-      loginLink.target = "_blank";
-      loginLink.rel = "noopener noreferrer";
-      loginLink.className = "contributor-login";
-      loginLink.textContent = author.name;
+      const loginLink = document.createElement("a")
+      loginLink.href = `https://github.com/${author.name}`
+      loginLink.target = "_blank"
+      loginLink.rel = "noopener noreferrer"
+      loginLink.className = "contributor-login"
+      loginLink.textContent = author.name
 
-      const contributionsText = document.createElement("p");
-      contributionsText.className = "contributor-contributions";
-      contributionsText.textContent = `子页面贡献: ${author.count}`;
+      const contributionsText = document.createElement("p")
+      contributionsText.className = "contributor-contributions"
+      contributionsText.textContent = `子页面贡献: ${author.count}`
 
-      card.appendChild(loginLink);
-      card.appendChild(contributionsText);
-      container.appendChild(card);
-    });
+      card.appendChild(loginLink)
+      card.appendChild(contributionsText)
+      container.appendChild(card)
+    })
   }
 
-  fetchProjectContributors()
-    .then(contributors => {
-      if (contributors) {
-        displayContributors(contributors);
-      }
-    });
+  fetchProjectContributors().then((contributors) => {
+    if (contributors) {
+      displayContributors(contributors)
+    }
+  })
 })

@@ -499,6 +499,7 @@ body:not(.dark-mode) #mobile-menu-toggle span {
     flex-direction: column;
     border-right: 1px solid var(--border-color-dark);
     overflow-y: auto;
+    overscroll-behavior-y: contain;
     transition: transform 0.5s ease, box-shadow 0.5s ease, left 0.3s ease;
     z-index: 250;
     -webkit-overflow-scrolling: touch;
@@ -1554,6 +1555,10 @@ body:not(.dark-mode) .loading-contributors {
         padding: 5px;
     }
 
+    .contributor-card {
+        padding: 15px 10px;
+    }
+
     .contributor-avatar {
         width: 80px;
         height: 80px;
@@ -1660,4 +1665,95 @@ a {
 
 .search-results a {
     padding: 14px 15px;
+}
+
+@media (max-width: 768px) {
+    .contributors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 15px;
+        padding: 5px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .contributor-card {
+        padding: 15px 10px;
+        width: 100%;
+    }
+
+    .contributor-avatar {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+    }
+
+    .contributor-login {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+        word-break: break-word;
+    }
+
+    .contributor-contributions {
+        font-size: 0.8em;
+        padding: 5px 10px;
+    }
+
+    .search-header {
+        position: relative;
+        z-index: 300;
+        padding: 10px;
+    }
+
+    .header-app-title {
+        font-size: 1.2em;
+        margin-bottom: 8px;
+    }
+
+    #search-input {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #mobile-menu-toggle {
+        top: 120px;
+        left: 15px;
+        z-index: 350;
+    }
+
+    .sidebar {
+        top: 130px;
+        height: calc(100vh - 130px);
+        z-index: 250;
+    }
+
+    .content {
+        margin-top: 20px;
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .project-contributors-section,
+    .subpage-contributors-section {
+        padding: 20px 10px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .contributors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+}
+
+body.body-no-scroll-when-sidebar-is-active {
+    overflow: hidden !important;
+}
+
+body.body-no-scroll-when-sidebar-is-active .sidebar.active {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
 }
