@@ -55,6 +55,13 @@
       "summary": "getsocpet,connection refused,connect refused: getsocopt",
       "url": "subpages/getsockot.html",
       "authors": ["Little_100"]
+    },
+    {
+      "id": "problem4",
+      "title": "e4mc",
+      "summary": "e4mc,an error occurred in e4mc,NAT,由于NAT因素,这些IP可能仍旧无法直接联机。",
+      "url": "subpages/e4mc.html",
+      "authors": ["Little_100"]
     }
   ]
 }
