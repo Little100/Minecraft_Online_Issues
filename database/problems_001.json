@@ -36,9 +36,23 @@
       "authors": ["Little_100"]
     },
     {
+      "id": "online5",
+      "title": "customskinloader",
+      "summary": "customskinloader,自定义皮肤加载器,皮肤,联机",
+      "url": "subpages/customskinloader.html",
+      "authors": ["Little_100"]
+    },
+    {
+      "id": "online6",
+      "title": "局域网联机",
+      "summary": "局域网,联机",
+      "url": "subpages/lianjied.html",
+      "authors": ["Little_100"]
+    },
+    {
       "id": "problem1",
       "title": "身份验证失败",
-      "summary": "身份验证失败,重启客户端",
+      "summary": "身份验证失败,重启客户端,登入失败，无效的绘画,无效的绘画",
       "url": "subpages/authfailed.html",
       "authors": ["Little_100"]
     },
@@ -52,8 +66,8 @@
     {
       "id": "problem3",
       "title": "getsockopt",
-      "summary": "getsocpet,connection refused,connect refused: getsocopt",
-      "url": "subpages/getsockot.html",
+      "summary": "getsocpet,connection refused,connect refused: getsocopt,未知主机",
+      "url": "subpages/getsockopt.html",
       "authors": ["Little_100"]
     },
     {
@@ -68,6 +82,27 @@
       "title": "javacmd",
       "summary": "无法安装java,以下开关中存在错误,请检查命令是否有效并重试。,jar",
       "url": "subpages/javacmd.html",
+      "authors": ["Little_100"]
+    },
+    {
+      "id": "problem6",
+      "title": "serverclosed",
+      "summary": "serverclosed,服务器关闭",
+      "url": "subpages/serverclosed.html",
+      "authors": ["Little_100"]
+    },
+    {
+      "id": "problem7",
+      "title": "Invalidcharactersinusername",
+      "summary": "Invalid characters in username,Internal Exception:javalang.IllegalStateException:Invalid characters in username,名规范,名字规范,规范",
+      "url": "subpages/Invalidcharactersinusername.html",
+      "authors": ["Little_100"]
+    },
+    {
+      "id": "problem8",
+      "title": "Index111outofboundsforlength111",
+      "summary": "Index *** out of bounds for length ***,index,out of bounds for length",
+      "url": "subpages/Invalidsession.html",
       "authors": ["Little_100"]
     }
   ]

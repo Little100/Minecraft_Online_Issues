@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let navLinks = []
 
-  const staticProblemIdsToExclude = ["online1", "online2", "online3", "online4", "caidan"]
+  const staticProblemIdsToExclude = ["online1", "online2", "online3", "online4", "online5","caidan"]
 
   const searchInput = document.getElementById("search-input")
   const searchResults = document.getElementById("search-results")
