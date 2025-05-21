@@ -62,6 +62,13 @@
       "summary": "e4mc,an error occurred in e4mc,NAT,由于NAT因素,这些IP可能仍旧无法直接联机。",
       "url": "subpages/e4mc.html",
       "authors": ["Little_100"]
+    },
+    {
+      "id": "problem5",
+      "title": "javacmd",
+      "summary": "无法安装java,以下开关中存在错误,请检查命令是否有效并重试。,jar",
+      "url": "subpages/javacmd.html",
+      "authors": ["Little_100"]
     }
   ]
 }
