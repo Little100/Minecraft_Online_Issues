@@ -87,7 +87,7 @@
     {
       "id": "problem7",
       "title": "Invalidcharactersinusername",
-      "summary": "Invalid characters in username,Internal Exception:javalang.IllegalStateException:Invalid characters in username,名规范,名字规范,规范",
+      "summary": "Invalid characters in username,Internal Exception:javalang.IllegalStateException:Invalid characters in username,名规范,名字规范,规范,string too big,was 18 characters, max16",
       "url": "subpages/Invalidcharactersinusername.html",
       "authors": ["Little_100"]
     },
