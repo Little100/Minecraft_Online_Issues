@@ -65,8 +65,8 @@
     },
     {
       "id": "problem3",
-      "title": "getsockopt",
-      "summary": "getsocpet,connection refused,connect refused: getsocopt,未知主机",
+      "title": "getsockopt/no further information",
+      "summary": "getsocpet,connection refused,connect refused: getsocopt,未知主机,no further information",
       "url": "subpages/getsockopt.html",
       "authors": ["Little_100"]
     },
