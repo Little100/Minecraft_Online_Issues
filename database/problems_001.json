@@ -43,13 +43,6 @@
       "authors": ["Little_100"]
     },
     {
-      "id": "online6",
-      "title": "局域网联机",
-      "summary": "局域网,联机",
-      "url": "subpages/lianjied.html",
-      "authors": ["Little_100"]
-    },
-    {
       "id": "problem1",
       "title": "身份验证失败",
       "summary": "身份验证失败,重启客户端,登入失败，无效的绘画,无效的绘画",
