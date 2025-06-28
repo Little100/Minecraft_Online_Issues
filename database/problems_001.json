@@ -104,6 +104,13 @@
       "summary": "未找到Java,Java not found,not found java,java,not,found,未找到 java 8,未找到 java8",
       "url": "subpages/JavaNotFound.html",
       "authors": ["Little_100"]
+    },
+    {
+      "id": "problem10",
+      "title": "Forge Server is not impl compatible with...",
+      "summary": "This modded server is not impl compatible with your modded client. Pleaseverify your Forge version closely matches the server. Got net version 2this server is net version 3",
+      "url": "subpages/FV.html",
+      "authors": ["Little_100"]
     }
   ]
 }
